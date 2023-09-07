@@ -1,0 +1,27 @@
+import pandas as pd
+
+# Load climate data from an Excel file (replace with your file path)
+data = pd.read_excel('C:\\Users\\Admin\\Downloads\\CLIMATE CHANGE.xlsx')
+
+# Assuming your data has a 'Date' column and a 'Temperature' column
+# If not, replace the column names below
+data['Date'] = pd.to_datetime(data['Date'])  # Convert 'Date' column to datetime
+data.set_index('Date', inplace=True)  # Set 'Date' column as the index
+
+# Define the decades you want to analyze
+decades = [1800, 1890, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000]
+
+# Calculate the mean temperature change for each decade
+mean_temp_changes = {}
+
+for start_year in decades:
+    end_year = start_year + 10
+    # Filter data for the current decade
+    decade_data = data[(data.index >= f'{start_year}-01-01') & (data.index < f'{end_year}-01-01')]
+    # Calculate mean temperature for the current decade
+    mean_temp_change = decade_data['Temperature'].mean()
+    mean_temp_changes[f'{start_year}-{end_year}'] = mean_temp_change
+
+# Print the mean temperature changes for each decade
+for decade, temp_change in mean_temp_changes.items():
+    print(f'Decade: {decade}, Mean Temperature Change: {temp_change:.2f}°C')
